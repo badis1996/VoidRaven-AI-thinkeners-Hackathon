@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.config import settings
+from app.api.v1.api import api_router
+
 def create_application() -> FastAPI:
     """Create and configure the FastAPI application."""
     application = FastAPI(
@@ -12,17 +15,14 @@ def create_application() -> FastAPI:
     # Configure CORS
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # In production, replace with specific origins
+        allow_origins=settings.BACKEND_CORS_ORIGINS,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
 
-    # Add routers
-    # TODO: Import and include routers for different API endpoints
-    # application.include_router(interviews_router, prefix="/api/v1/interviews")
-    # application.include_router(assessments_router, prefix="/api/v1/assessments")
-    # application.include_router(actions_router, prefix="/api/v1/actions")
+    # Add API router
+    application.include_router(api_router, prefix=settings.API_V1_STR)
 
     @application.get("/")
     async def root():

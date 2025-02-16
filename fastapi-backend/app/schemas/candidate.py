@@ -11,7 +11,7 @@ class CandidateBase(BaseModel):
 
 class CandidateCreate(CandidateBase):
     """Pydantic model for creating a Candidate."""
-    pass
+    cv_file: Optional[str] = Field(None, description="Base64 encoded PDF file")
 
 class CandidateUpdate(BaseModel):
     """Pydantic model for updating a Candidate."""
@@ -31,4 +31,16 @@ class CandidateInDB(CandidateBase):
 
 class Candidate(CandidateInDB):
     """Pydantic model for Candidate response."""
-    pass 
+    pass
+
+class InterviewDataUpdate(BaseModel):
+    """Pydantic model for updating interview data."""
+    email: EmailStr
+    audio_url: str
+    transcript: str
+
+class TranscriptResponse(BaseModel):
+    """Pydantic model for transcript response."""
+    email: EmailStr
+    transcript: str
+    created_at: datetime 

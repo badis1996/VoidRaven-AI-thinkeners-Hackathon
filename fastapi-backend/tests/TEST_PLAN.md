@@ -1,9 +1,64 @@
 # AI Assessment Agent Test Plan
 
-## 1. Database Layer Tests
+## 1. API Layer Tests
 
 ### Current Coverage
-- Basic CRUD operations for all models
+- Basic CRUD operations for candidates
+- CV file upload and processing
+- Interview data management
+- Transcript retrieval
+- Error handling
+
+### Planned Additions
+
+#### Endpoint Tests
+1. **CV Processing**
+   - Multiple CV formats (PDF, DOCX, etc.)
+   - File size limits
+   - Content validation
+   - Metadata extraction
+
+2. **Candidate Management**
+   - Profile updates
+   - CV version control
+   - Bulk operations
+   - Search and filtering
+
+3. **Interview Process**
+   - Real-time updates
+   - Audio processing
+   - Transcript generation
+   - Assessment scoring
+
+4. **Integration Tests**
+   - AI service integration
+   - External API communication
+   - Authentication flows
+   - File storage services
+
+#### Performance Tests
+1. **File Processing**
+   - Large file handling
+   - Concurrent uploads
+   - Processing time optimization
+   - Resource usage monitoring
+
+2. **Request Handling**
+   - Concurrent requests
+   - Rate limiting
+   - Response times
+   - Load balancing
+
+3. **Data Operations**
+   - Bulk operations
+   - Query optimization
+   - Cache effectiveness
+   - Database performance
+
+## 2. Database Layer Tests
+
+### Current Coverage
+- Basic CRUD operations
 - Relationship integrity
 - Cascade deletions
 - Transaction handling
@@ -54,57 +109,79 @@
    - Query optimization
    - Cache effectiveness
 
-## 2. API Layer Tests
-
-### Planned Tests
-
-1. **Endpoint Testing**
-   - Request validation
-   - Response formats
-   - Status codes
-   - Error responses
-
-2. **Authentication/Authorization**
-   - Token validation
-   - Permission checks
-   - Role-based access
-   - Session handling
-
-3. **Integration Tests**
-   - End-to-end flows
-   - External service integration
-   - WebSocket connections
-   - File uploads/downloads
-
-4. **Performance Tests**
-   - Response times
-   - Concurrent requests
-   - Rate limiting
-   - Load testing
-
 ## 3. Business Logic Tests
 
+### Current Coverage
+- Candidate creation with CV
+- Interview data management
+- Transcript handling
+- Basic error handling
+
 ### Planned Tests
 
-1. **Interview Process**
-   - Interview creation
+1. **CV Processing**
+   - Text extraction
+   - Format validation
+   - Content analysis
+   - Metadata handling
+
+2. **Interview Process**
    - Question generation
    - Answer processing
    - Score calculation
+   - Recommendation engine
 
-2. **Assessment Logic**
+3. **Assessment Logic**
    - Candidate evaluation
    - Scoring algorithms
-   - Recommendation engine
    - Decision making
+   - Result reporting
 
-3. **AI Integration**
-   - Claude API integration
-   - Prompt handling
-   - Response processing
+4. **Integration Logic**
+   - Service coordination
+   - Data flow management
    - Error recovery
+   - State management
 
-## 4. Test Infrastructure
+## 4. Security Tests
+
+### Planned Tests
+
+1. **File Security**
+   - Upload validation
+   - Content scanning
+   - Access control
+   - Storage security
+
+2. **Data Protection**
+   - Personal data handling
+   - Encryption
+   - Access logging
+   - Compliance checks
+
+3. **API Security**
+   - Authentication
+   - Authorization
+   - Rate limiting
+   - Input validation
+
+## 5. Monitoring and Logging
+
+### Planned Tests
+
+1. **Logging System**
+   - Error logging
+   - Activity tracking
+   - Performance metrics
+   - Audit trails
+
+2. **Monitoring**
+   - Resource usage
+   - Error rates
+   - Response times
+   - System health
+
+## 6. Test Infrastructure
 
 ### Improvements
 
@@ -132,26 +209,27 @@
    - Maintenance procedures
    - Troubleshooting guides
 
-## 5. Timeline
+## 7. Timeline
 
 ### Phase 1 (Current)
-- ✅ Basic database operations
-- ✅ Model relationships
-- ✅ Transaction handling
+- ✅ Basic API endpoints
+- ✅ CV upload functionality
+- ✅ Database operations
+- ✅ Error handling
 
-### Phase 2 (Next Sprint)
-- [ ] Update operations
-- [ ] Validation tests
-- [ ] API endpoint tests
-- [ ] Authentication tests
+### Phase 2 (Next)
+- [ ] Enhanced CV processing
+- [ ] Interview management
+- [ ] Performance optimization
+- [ ] Security implementation
 
 ### Phase 3 (Future)
-- [ ] Performance tests
-- [ ] Integration tests
-- [ ] AI integration tests
-- [ ] Load testing
+- [ ] AI integration
+- [ ] Advanced features
+- [ ] Monitoring system
+- [ ] Production readiness
 
-## 6. Success Metrics
+## 8. Success Metrics
 
 1. **Coverage Goals**
    - Models: 100%
