@@ -1,0 +1,30 @@
+[
+    {
+        "AI": "Hi there! I'm Brian, and I'll be your interviewer today. Are you ready?",
+        "User": "Hi, Brian. Yes, I'm ready."
+    },
+    {
+        "AI": "Great! Welcome, Alexandra. I'm Brian, a senior admissions interviewer here at Paris Business School. Thank you for taking the time to meet with me today. To start, can you tell me a little about yourself and what motivates you to pursue further studies in a business program?",
+        "User": "Sure. I had excellent grades in high school, and then I went to Germany to pursue my studies. I stayed there for three years, earning my bachelor's and master's degrees in electrical engineering. Now, I believe it's time to aim higher by studying business because I want to launch my own startup and gain more knowledge about business and economics."
+    },
+    {
+        "AI": "Thank you for sharing that background, Alexandra. It sounds like you have a strong foundation and a clear vision for your future in business. With your aspiration of launching your own startup, what specific skills and knowledge do you believe are most critical for you to acquire through a business program? Additionally, how do you think Paris Business School's focus on innovation and entrepreneurship aligns with your goals?",
+        "User": "My vision is to learn more about business and economics, which I believe will help me run my own business in the future. I also think Paris Business School has excellent programs and top professors to help me achieve that."
+    },
+    {
+        "AI": "That's a wonderful vision, Alexandra. It's great to hear that you're focused on expanding your knowledge in business and economics to prepare for running your own company. Given your aspirations, have you considered any specific areas of business that interest you most? For example, do you have a particular focus in mind such as finance, marketing, or entrepreneurship? Additionally, how do you plan to leverage the resources and network at Paris Business School to achieve your goals?",
+        "User": "I'm particularly interested in entrepreneurship. As I mentioned, I want to start my own business and learn how to manage people, solve problems, and run a successful company. I\u2019m confident that Paris Business School, with its resources and support, is the best place for me."
+    },
+    {
+        "AI": "Thank you for sharing that, Alexandra. It's commendable that you have such a clear focus on entrepreneurship and running your own startup. Paris Business School prides itself on fostering entrepreneurial spirit and providing the necessary resources for students to succeed. Can you share an example of a challenge you faced in a leadership or project management role? How did you approach that challenge, and what did you learn from the experience that will help you as an entrepreneur?",
+        "User": "Absolutely. One big challenge I faced was during a hackathon in high school. As a team leader, I worked with people who had different attitudes\u2014some had big egos, some didn\u2019t take feedback well, and others struggled under pressure. Since time was limited, I had to address these challenges quickly by clearly communicating our goals from the start, assigning tasks based on each person's strengths, and fostering open communication. This experience taught me the importance of clear leadership and effective teamwork."
+    },
+    {
+        "AI": "Thank you for sharing that experience, Alexandra. It sounds like you demonstrated significant leadership and problem-solving skills in a challenging situation. Managing a team with diverse personalities under time pressure is difficult. Can you elaborate on how you ensured that everyone felt included and motivated despite the differing attitudes in your team? What specific strategies did you use to foster collaboration, and what lessons did you take away that will benefit you in your pursuit of entrepreneurship?",
+        "User": "To make everyone feel included, I clearly communicated the project objectives and the importance of meeting deadlines. I explained the consequences of working in different directions and emphasized the need for collaboration. When opinions clashed, I reminded the team of our shared goal and time constraints, which helped us stay focused and work together."
+    },
+    {
+        "AI": "Thank you for elaborating, Alexandra. Your ability to clearly communicate objectives and foster collaboration under pressure is impressive and essential for both team dynamics and leadership. Do you see yourself contributing to the collaborative environment at Paris Business School? Additionally, how do you think your background and experience will enhance your perspective when working with peers from diverse professional backgrounds in our multicultural setting?",
+        "User": "Absolutely! I believe I can contribute significantly to team projects, student associations, and organizing events like hackathons. My experience in managing teams and leading projects will help me collaborate effectively with my peers. At the same time, the resources at Paris Business School will help me improve my skills and stay motivated to contribute more every day."
+    }
+]
