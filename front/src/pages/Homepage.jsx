@@ -16,12 +16,14 @@ function Homepage() {
 	let history = useHistory();
 	const [error, setError] = useState(null);
 
-	const [username, setUsername] = useState();
-	const [password, setPassword] = useState();
+	const [fullname, setFullname] = useState();
+	const [email, setEmail] = useState();
+    const [cv, setCV] = useState();
 
 	let data = {
-		username: username,
-        password: password
+		fullname: fullname,
+        email: email,
+        cv_data: cv,
 	};
 
 	let req = { method: 'POST',
@@ -31,7 +33,7 @@ function Homepage() {
 	    body: JSON.stringify(data)
 	};
 
-	let url = new Request(getApiUrl() + "user/login");
+	let url = new Request(getApiUrl());
 
 	const handleLoginSubmit = async e => {
 		setError(null);
@@ -46,7 +48,7 @@ function Homepage() {
 
 			  response.json().then(function(data) {
 			    setUserSession(data.token, data.user.pseudo);
-				history.push('/dashboard/');
+				history.push('/interview');
 			  });
 			})
 			.catch(function(err) {
@@ -98,6 +100,7 @@ function Homepage() {
 							name="text"
 							placeholder="John Doe"
 							className="auth-form-input"
+                            onChange={e => setFullname(e.target.value)} 
 							required 
 							autoFocus />
 					<p className="auth-form-label">
@@ -107,6 +110,7 @@ function Homepage() {
 							name="email"
 							placeholder="john.doe@mail.com"
 							className="auth-form-input"
+                            onChange={e => setEmail(e.target.value)} 
 							required />
                     <p className="auth-form-label">
 						<b>Curriculum vitæ (CV)</b>
@@ -114,6 +118,7 @@ function Homepage() {
 					<input  type="file" 
 							name="cv"
 							className="auth-form-input"
+                            onChange={e => setCV(e.target.value)}
 							required />
 					<input  type="submit" 
 							value="Get Started"
