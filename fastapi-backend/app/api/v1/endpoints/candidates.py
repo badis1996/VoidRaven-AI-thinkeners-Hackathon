@@ -1,5 +1,5 @@
 from typing import Any
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update
@@ -25,12 +25,14 @@ router = APIRouter()
 async def create_candidate(
     *,
     db: AsyncSession = Depends(get_db),
-    candidate_in: CandidateCreate,
+    name: str = Form(...),
+    email: str = Form(...),
+    cv_file: UploadFile = File(None),
 ) -> Any:
     """Create new candidate with CV."""
     # Check if candidate with email already exists
     result = await db.execute(
-        select(CandidateModel).where(CandidateModel.email == candidate_in.email)
+        select(CandidateModel).where(CandidateModel.email == email)
     )
     if result.scalar_one_or_none():
         raise HTTPException(
@@ -40,12 +42,15 @@ async def create_candidate(
 
     # Process CV file if provided
     cv_data = {}
-    if candidate_in.cv_file:
+    if cv_file:
         try:
-            # Store the base64 encoded PDF
+            # Read the PDF file content
+            content = await cv_file.read()
+            # Store the PDF content and metadata
             cv_data = {
-                "pdf_content": candidate_in.cv_file,
-                "mime_type": "application/pdf"
+                "pdf_content": base64.b64encode(content).decode('utf-8'),
+                "filename": cv_file.filename,
+                "mime_type": cv_file.content_type
             }
         except Exception as e:
             raise HTTPException(
@@ -55,8 +60,8 @@ async def create_candidate(
 
     # Create new candidate
     db_obj = CandidateModel(
-        name=candidate_in.name,
-        email=candidate_in.email,
+        name=name,
+        email=email,
         cv_data=cv_data,
     )
     db.add(db_obj)

@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 from uuid import UUID
+from fastapi import UploadFile
 from pydantic import BaseModel, EmailStr, Field
 
 class CandidateBase(BaseModel):
@@ -9,9 +10,11 @@ class CandidateBase(BaseModel):
     email: EmailStr
     cv_data: Optional[Dict[str, Any]] = None
 
-class CandidateCreate(CandidateBase):
+class CandidateCreate(BaseModel):
     """Pydantic model for creating a Candidate."""
-    cv_file: Optional[str] = Field(None, description="Base64 encoded PDF file")
+    name: str = Field(..., min_length=1, max_length=100)
+    email: EmailStr
+    cv_file: Optional[UploadFile] = None
 
 class CandidateUpdate(BaseModel):
     """Pydantic model for updating a Candidate."""
