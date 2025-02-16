@@ -18,45 +18,45 @@ function Homepage() {
 
 	const [fullname, setFullname] = useState();
 	const [email, setEmail] = useState();
-    const [cv, setCV] = useState();
-
-	let data = {
-		fullname: fullname,
-        email: email,
-        cv_data: cv,
-	};
-
-	let req = { method: 'POST',
-	    headers: { 'Content-Type': 'application/json' },
-	    mode: 'cors',
-	    cache: 'default',
-	    body: JSON.stringify(data)
-	};
-
-	let url = new Request(getApiUrl());
+	const [cv, setCV] = useState();
 
 	const handleLoginSubmit = async e => {
 		setError(null);
 		e.preventDefault();
 
-		await fetch(url, req)
-			.then(function(response) {
-			  if (response.status !== 200) {
+		const formData = new FormData();
+		formData.append('name', fullname);
+		formData.append('email', email);
+		formData.append('cv', cv);
+
+		try {
+			const response = await fetch(getApiUrl() + "api/v1/candidates", {
+				method: 'POST',
+				mode: 'cors',
+				body: formData
+			});
+			
+			if (response.status !== 200) {
 				setError("Something went wrong, please try again.");
 				return;
-			  }
+			}
 
-			  response.json().then(function(data) {
-			    setUserSession(data.token, data.user.pseudo);
-				history.push('/interview');
-			  });
-			})
-			.catch(function(err) {
-				console.log('Fetch Error :-S', err);
-				removeUserSession();
-				setError(err);
-			});
+			const data = await response.json();
+			setUserSession(data.token, data.user.pseudo);
+			history.push('/interview');
+			
+		} catch (err) {
+			console.log('Fetch Error :-S', err);
+			removeUserSession();
+			setError("Network error occurred. Please try again later.");
+		}
 	}
+
+	const handleFileChange = (e) => {
+		if (e.target.files) {
+			setCV(e.target.files[0]);
+		}
+	};
 
 	return (
 	    // <JumbotronWrapper title="Login" className="text-center">
@@ -118,7 +118,7 @@ function Homepage() {
 					<input  type="file" 
 							name="cv"
 							className="auth-form-input"
-                            onChange={e => setCV(e.target.value)}
+							onChange={handleFileChange}
 							required />
 					<input  type="submit" 
 							value="Get Started"
