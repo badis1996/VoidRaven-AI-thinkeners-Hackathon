@@ -64,6 +64,7 @@ class Settings(BaseSettings):
     
     # AI Configuration
     ANTHROPIC_API_KEY: str = ""
+    OPENAI_API_KEY: str = ""
     
     # Logging
     LOG_LEVEL: str = "INFO"
