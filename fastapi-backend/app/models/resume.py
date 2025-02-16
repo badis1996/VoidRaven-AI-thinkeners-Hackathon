@@ -1,6 +1,7 @@
 from typing import List, Optional
 from datetime import date
 from pydantic import BaseModel
+from sqlalchemy.orm import relationship
 
 class Education(BaseModel):
     institution: str
@@ -30,3 +31,6 @@ class Resume(BaseModel):
     skills: List[Skill] = []  # Changed default to empty list
     certifications: List[str] = []  # Changed default to empty list
     languages: List[str] = []  # Changed default to empty list
+
+# Add this to your Candidate model if it doesn't exist already
+interview_analyses = relationship("InterviewAnalysis", back_populates="candidate")
