@@ -9,7 +9,7 @@ class Question(BaseModel):
     """Question model for storing interview questions and answers."""
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    question = Column(Text, nullable=False)
+    content = Column(Text, nullable=False)
     answer = Column(Text, nullable=True)
     
     # Foreign Keys

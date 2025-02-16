@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from uuid import UUID
 from pydantic import BaseModel, EmailStr, Field
 
@@ -33,11 +33,41 @@ class Candidate(CandidateInDB):
     """Pydantic model for Candidate response."""
     pass
 
+class QuestionCreate(BaseModel):
+    """Pydantic model for creating a Question."""
+    content: str
+    answer: str
+
+class QuestionResponse(QuestionCreate):
+    """Pydantic model for Question response."""
+    id: UUID
+    interview_id: UUID
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        """Pydantic model configuration."""
+        from_attributes = True
+
 class InterviewDataUpdate(BaseModel):
     """Pydantic model for updating interview data."""
     email: EmailStr
-    audio_url: str
+    audio_url: Optional[str] = None
     transcript: str
+    questions: Optional[List[QuestionCreate]] = []
+
+class InterviewResponse(BaseModel):
+    """Pydantic model for Interview response."""
+    id: UUID
+    candidate_id: UUID
+    transcript: str
+    questions: List[QuestionResponse]
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        """Pydantic model configuration."""
+        from_attributes = True
 
 class TranscriptResponse(BaseModel):
     """Pydantic model for transcript response."""

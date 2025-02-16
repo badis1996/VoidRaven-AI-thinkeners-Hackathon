@@ -20,14 +20,16 @@ async def test_create_candidate(db_session: AsyncSession):
     )
     
     db_session.add(candidate)
-    await db_session.commit()
-    await db_session.refresh(candidate)
+    await db_session.flush()
     
     # Verify the candidate was created
-    assert candidate.id is not None
-    assert candidate.name == "Test Candidate"
-    assert candidate.email == "test@example.com"
-    assert candidate.cv_data == {"education": "Master's in Computer Science"}
+    result = await db_session.execute(select(Candidate).where(Candidate.email == "test@example.com"))
+    db_candidate = result.scalar_one()
+    
+    assert db_candidate.id == candidate.id
+    assert db_candidate.name == "Test Candidate"
+    assert db_candidate.email == "test@example.com"
+    assert db_candidate.cv_data == {"education": "Master's in Computer Science"}
 
 @pytest.mark.asyncio
 async def test_create_interview_with_questions(db_session: AsyncSession):
@@ -39,7 +41,7 @@ async def test_create_interview_with_questions(db_session: AsyncSession):
         email="interview.test@example.com"
     )
     db_session.add(candidate)
-    await db_session.commit()
+    await db_session.flush()
     
     # Create an interview
     interview = Interview(
@@ -48,43 +50,42 @@ async def test_create_interview_with_questions(db_session: AsyncSession):
         transcript="Test interview transcript"
     )
     db_session.add(interview)
-    await db_session.commit()
+    await db_session.flush()
     
-    # Add some questions
+    # Create some questions
     questions = [
         Question(
             id=uuid.uuid4(),
             interview_id=interview.id,
-            question="What is your background?",
-            answer="I have a degree in Computer Science"
+            content="What is your experience with Python?",
+            answer="I have 5 years of experience."
         ),
         Question(
             id=uuid.uuid4(),
             interview_id=interview.id,
-            question="Why do you want to join this program?",
-            answer="To enhance my knowledge in AI"
+            content="Tell me about your biggest project.",
+            answer="I led a team of 5 developers."
         )
     ]
+    for question in questions:
+        db_session.add(question)
+    await db_session.flush()
     
-    db_session.add_all(questions)
-    await db_session.commit()
+    # Verify everything was created correctly
+    result = await db_session.execute(
+        select(Interview).where(Interview.candidate_id == candidate.id)
+    )
+    db_interview = result.scalar_one()
     
-    # Verify the interview and questions were created
-    stmt = select(Interview).where(Interview.id == interview.id)
-    result = await db_session.execute(stmt)
-    saved_interview = result.scalar_one()
+    result = await db_session.execute(
+        select(Question).where(Question.interview_id == interview.id)
+    )
+    db_questions = result.scalars().all()
     
-    assert saved_interview.id == interview.id
-    assert saved_interview.candidate_id == candidate.id
-    assert saved_interview.transcript == "Test interview transcript"
-    
-    # Verify questions
-    stmt = select(Question).where(Question.interview_id == interview.id)
-    result = await db_session.execute(stmt)
-    saved_questions = result.scalars().all()
-    
-    assert len(saved_questions) == 2
-    assert all(q.interview_id == interview.id for q in saved_questions)
+    assert db_interview.transcript == "Test interview transcript"
+    assert len(db_questions) == 2
+    assert db_questions[0].content == "What is your experience with Python?"
+    assert db_questions[1].content == "Tell me about your biggest project."
 
 @pytest.mark.asyncio
 async def test_cascade_delete(db_session: AsyncSession):
@@ -96,37 +97,51 @@ async def test_cascade_delete(db_session: AsyncSession):
         email="cascade.test@example.com"
     )
     db_session.add(candidate)
-    await db_session.commit()
+    await db_session.flush()
     
-    # Create an interview
+    # Create an interview with questions
     interview = Interview(
         id=uuid.uuid4(),
-        candidate_id=candidate.id
+        candidate_id=candidate.id,
+        transcript="Test cascade transcript"
     )
     db_session.add(interview)
-    await db_session.commit()
+    await db_session.flush()
     
-    # Add a question
-    question = Question(
-        id=uuid.uuid4(),
-        interview_id=interview.id,
-        question="Test question?",
-        answer="Test answer"
-    )
-    db_session.add(question)
-    await db_session.commit()
+    questions = [
+        Question(
+            id=uuid.uuid4(),
+            interview_id=interview.id,
+            content="First cascade question?",
+            answer="First cascade answer"
+        ),
+        Question(
+            id=uuid.uuid4(),
+            interview_id=interview.id,
+            content="Second cascade question?",
+            answer="Second cascade answer"
+        )
+    ]
+    for question in questions:
+        db_session.add(question)
+    await db_session.flush()
     
     # Delete the candidate
     await db_session.delete(candidate)
-    await db_session.commit()
+    await db_session.flush()
     
-    # Verify cascade delete
-    stmt = select(Interview).where(Interview.id == interview.id)
-    result = await db_session.execute(stmt)
-    deleted_interview = result.scalar_one_or_none()
-    assert deleted_interview is None
+    # Verify cascade deletion
+    result = await db_session.execute(
+        select(Candidate).where(Candidate.id == candidate.id)
+    )
+    assert result.scalar_one_or_none() is None
     
-    stmt = select(Question).where(Question.id == question.id)
-    result = await db_session.execute(stmt)
-    deleted_question = result.scalar_one_or_none()
-    assert deleted_question is None 
+    result = await db_session.execute(
+        select(Interview).where(Interview.id == interview.id)
+    )
+    assert result.scalar_one_or_none() is None
+    
+    result = await db_session.execute(
+        select(Question).where(Question.interview_id == interview.id)
+    )
+    assert len(result.scalars().all()) == 0 
