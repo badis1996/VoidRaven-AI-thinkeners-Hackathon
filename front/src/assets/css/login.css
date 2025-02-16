@@ -192,6 +192,33 @@ input.auth-form-btn {
     }
 }
 
+.auth-form-btn-end-call {
+    cursor: pointer;
+    width: 400px;
+    background: var(--red-habit-title-text-color);
+    color: var(--background-color);
+    font-family: 'Nurom';
+    letter-spacing: -0.01rem;
+    font-size: 18px;
+    padding: 16px;
+    margin: 16px 0 24px 0;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 1000px;
+
+    &:hover {
+        background-color: var(--error-banner-text-color);
+        background: var(--error-banner-text-color);
+    }
+
+    &:active {
+        background: var(--error-banner-text-color);
+        font-size: 17.5px;
+        padding: 15.5px 16px;
+    }
+}
+
+
 .auth-form-alt {
     margin: 8px 0 16px;
     display: flex;

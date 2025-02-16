@@ -2,8 +2,9 @@ import React, { Component, memo } from "react";
 import { useLocation } from "react-router-dom";
 import CircularLoading from "../components/circular-loading/CircularLoading";
 import Vapi from "@vapi-ai/web";
+import Webcam from "react-webcam";
 
-import './../assets/css/style.css'
+import './../assets/css/style.css';
 
 
 const Interview = props => {
@@ -134,6 +135,8 @@ class InterviewMain extends Component {
         //     name: "My Inline Assistant",
         // });
 
+        this.setState({ isLoaded: true });
+
         vapi.on("call-start", () => {
             console.log("Call has started.");
         });
@@ -153,15 +156,26 @@ class InterviewMain extends Component {
         });
     }
 
+    
+
     render() {
         if (!this.state.isLoaded) {
             return <div><CircularLoading /></div>;
-        } else if (!this.state.assitant) {
-            return <p>No response</p>;
         } else {
-            return (  <>
-                    {this.state.assitant.message}
-                    </>);
+            return (
+                <div className="center-to-screen">
+                    <Webcam audio={false}
+                            height={720}
+                            screenshotFormat="image/jpeg"
+                            width={1280} />
+
+                    <input  type="submit" 
+                        value="End Interview"
+                        className="auth-form-btn-end-call"
+                        disabled={this.state.isLoaded}
+                        style={{ position: 'relative' }} />
+                </div>
+            );
         }
     }
 }
