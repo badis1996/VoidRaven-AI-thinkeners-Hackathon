@@ -23,3 +23,10 @@ flake8>=7.0.0
 mypy>=1.8.0
 pytest-cov>=4.1.0
 pytest-asyncio>=0.23.0 
+
+# New requirements
+langgraph>=0.0.15
+transformers>=4.36.0
+torch>=2.1.0
+numpy>=1.24.0
+soundfile>=0.12.1 
