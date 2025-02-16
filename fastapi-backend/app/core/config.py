@@ -62,9 +62,10 @@ class Settings(BaseSettings):
             f"@{self.POSTGRES_HOSTNAME}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
     
-    # AI Configuration
+    # API Keys
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
+    VAPI_TOKEN: str = ""
     
     # Logging
     LOG_LEVEL: str = "INFO"

@@ -1,11 +1,14 @@
 from typing import Any
-from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Form
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Form, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update
 from sqlalchemy.orm import selectinload
 import base64
 import json
+import httpx
+import os
+from pydantic import BaseModel
 
 from app.core.database import get_db
 from app.models.candidate import Candidate as CandidateModel
@@ -136,7 +139,6 @@ async def get_transcript(
         select(CandidateModel, InterviewModel)
         .join(InterviewModel)
         .where(CandidateModel.email == email)
-        .options(selectinload(InterviewModel.questions))
         .order_by(InterviewModel.created_at.desc())
     )
     row = result.first()
@@ -151,4 +153,76 @@ async def get_transcript(
         email=candidate.email,
         transcript=interview.transcript,
         created_at=interview.created_at,
-    ) 
+    )
+
+class VapiTranscriptRequest(BaseModel):
+    email: str
+    call_id: str
+
+@router.post("/vapi-transcript", response_model=InterviewResponse)
+async def fetch_vapi_transcript(
+    *,
+    db: AsyncSession = Depends(get_db),
+    request: VapiTranscriptRequest,
+) -> Any:
+    """Fetch transcript from Vapi API and update interview record."""
+    # Get the candidate
+    result = await db.execute(
+        select(CandidateModel).where(CandidateModel.email == request.email)
+    )
+    candidate = result.scalar_one_or_none()
+    if not candidate:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Candidate not found",
+        )
+
+    # Fetch transcript from Vapi
+    vapi_token = os.getenv("VAPI_TOKEN")
+    if not vapi_token:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="VAPI_TOKEN not configured",
+        )
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"https://api.vapi.ai/call/{request.call_id}",
+            headers={"Authorization": f"Bearer {vapi_token}"},
+        )
+        
+        if response.status_code != 200:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to fetch transcript from Vapi: {response.text}",
+            )
+        
+        vapi_data = response.json()
+        transcript = vapi_data.get("transcript")
+        if not transcript:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="No transcript found in Vapi response",
+            )
+
+    # Create or update interview
+    result = await db.execute(
+        select(InterviewModel)
+        .where(InterviewModel.candidate_id == candidate.id)
+    )
+    interview = result.scalar_one_or_none()
+    
+    if not interview:
+        interview = InterviewModel(
+            candidate_id=candidate.id,
+            transcript=transcript,
+            audio_url=vapi_data.get("recordingUrl")
+        )
+        db.add(interview)
+    else:
+        interview.transcript = transcript
+        interview.audio_url = vapi_data.get("recordingUrl")
+    
+    await db.commit()
+    await db.refresh(interview)
+    return interview 

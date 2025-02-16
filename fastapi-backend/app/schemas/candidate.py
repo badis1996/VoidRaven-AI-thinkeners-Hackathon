@@ -64,7 +64,7 @@ class InterviewResponse(BaseModel):
     id: UUID
     candidate_id: UUID
     transcript: str
-    questions: List[QuestionResponse]
+    audio_url: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
