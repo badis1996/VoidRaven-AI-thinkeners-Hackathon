@@ -20,10 +20,13 @@ from app.schemas.candidate import (
     InterviewDataUpdate,
     InterviewResponse,
     TranscriptResponse,
+    VapiTranscriptResponse,
 )
 from app.services.resume_analysis.resume_agent import ResumeAnalysisAgent
+from app.services.transcript_analysis.transcript_agent import TranscriptAnalysisAgent
 
 resume_agent = ResumeAnalysisAgent()
+transcript_agent = TranscriptAnalysisAgent()
 router = APIRouter()
 
 @router.post("/", response_model=Candidate, status_code=status.HTTP_201_CREATED)
@@ -159,7 +162,7 @@ class VapiTranscriptRequest(BaseModel):
     email: str
     call_id: str
 
-@router.post("/vapi-transcript", response_model=InterviewResponse)
+@router.post("/vapi-transcript", response_model=VapiTranscriptResponse)
 async def fetch_vapi_transcript(
     *,
     db: AsyncSession = Depends(get_db),
@@ -205,24 +208,46 @@ async def fetch_vapi_transcript(
                 detail="No transcript found in Vapi response",
             )
 
-    # Create or update interview
-    result = await db.execute(
-        select(InterviewModel)
-        .where(InterviewModel.candidate_id == candidate.id)
-    )
-    interview = result.scalar_one_or_none()
-    
-    if not interview:
-        interview = InterviewModel(
-            candidate_id=candidate.id,
-            transcript=transcript,
-            audio_url=vapi_data.get("recordingUrl")
+    # Analyze the transcript
+    try:
+        evaluation = transcript_agent.analyse_transcript(transcript)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error analyzing transcript: {str(e)}",
         )
-        db.add(interview)
-    else:
-        interview.transcript = transcript
-        interview.audio_url = vapi_data.get("recordingUrl")
-    
-    await db.commit()
-    await db.refresh(interview)
-    return interview 
+
+    # Create or update interview
+    try:
+        result = await db.execute(
+            select(InterviewModel)
+            .where(InterviewModel.candidate_id == candidate.id)
+        )
+        interview = result.scalar_one_or_none()
+        
+        if not interview:
+            interview = InterviewModel(
+                candidate_id=candidate.id,
+                transcript=transcript,
+                audio_url=vapi_data.get("recordingUrl"),
+                evaluation=evaluation
+            )
+            db.add(interview)
+        else:
+            interview.transcript = transcript
+            interview.audio_url = vapi_data.get("recordingUrl")
+            interview.evaluation = evaluation
+        
+        await db.commit()
+        await db.refresh(interview)
+        
+        # Return only transcript and evaluation
+        return VapiTranscriptResponse(
+            transcript=transcript,
+            evaluation=evaluation
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error saving interview: {str(e)}",
+        ) 

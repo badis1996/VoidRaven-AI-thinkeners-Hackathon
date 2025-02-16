@@ -65,6 +65,7 @@ class InterviewResponse(BaseModel):
     candidate_id: UUID
     transcript: str
     audio_url: Optional[str] = None
+    evaluation: Optional[Dict[str, Any]] = None
     created_at: datetime
     updated_at: datetime
 
@@ -76,4 +77,9 @@ class TranscriptResponse(BaseModel):
     """Pydantic model for transcript response."""
     email: EmailStr
     transcript: str
-    created_at: datetime 
+    created_at: datetime
+
+class VapiTranscriptResponse(BaseModel):
+    """Pydantic model for vapi transcript response."""
+    transcript: str
+    evaluation: Dict[str, Any] 
