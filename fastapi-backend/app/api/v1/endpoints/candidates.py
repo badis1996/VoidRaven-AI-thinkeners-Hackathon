@@ -18,7 +18,9 @@ from app.schemas.candidate import (
     InterviewResponse,
     TranscriptResponse,
 )
+from app.services.resume_analysis.resume_agent import ResumeAnalysisAgent
 
+resume_agent = ResumeAnalysisAgent()
 router = APIRouter()
 
 @router.post("/", response_model=Candidate, status_code=status.HTTP_201_CREATED)
@@ -45,13 +47,8 @@ async def create_candidate(
     if cv_file:
         try:
             # Read the PDF file content
-            content = await cv_file.read()
-            # Store the PDF content and metadata
-            cv_data = {
-                "pdf_content": base64.b64encode(content).decode('utf-8'),
-                "filename": cv_file.filename,
-                "mime_type": cv_file.content_type
-            }
+            pdf_data = base64.b64encode(cv_file.file.read()).decode('utf-8')
+            cv_data = resume_agent.read_resume(pdf_data)
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
