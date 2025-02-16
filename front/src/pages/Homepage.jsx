@@ -27,7 +27,7 @@ function Homepage() {
 		const formData = new FormData();
 		formData.append('name', fullname);
 		formData.append('email', email);
-		formData.append('cv', cv);
+		formData.append('cv_file', cv);
 
 		try {
 			const response = await fetch(getApiUrl() + "api/v1/candidates", {
@@ -36,13 +36,13 @@ function Homepage() {
 				body: formData
 			});
 			
-			if (response.status !== 200) {
+			if (response.status !== 201) {
 				setError("Something went wrong, please try again.");
 				return;
 			}
 
 			const data = await response.json();
-			setUserSession(data.token, data.user.pseudo);
+			//setUserSession(data.token, data.user.pseudo);
 			history.push('/interview');
 			
 		} catch (err) {
