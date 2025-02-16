@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.v1.endpoints import audio_analysis
 
 def create_application() -> FastAPI:
     """Create and configure the FastAPI application."""
@@ -23,7 +24,11 @@ def create_application() -> FastAPI:
     # application.include_router(interviews_router, prefix="/api/v1/interviews")
     # application.include_router(assessments_router, prefix="/api/v1/assessments")
     # application.include_router(actions_router, prefix="/api/v1/actions")
-
+    application.include_router(
+        audio_analysis.router,
+        prefix="/api/v1/audio",
+        tags=["audio"]
+    )
     @application.get("/")
     async def root():
         """Root endpoint returning API information."""
