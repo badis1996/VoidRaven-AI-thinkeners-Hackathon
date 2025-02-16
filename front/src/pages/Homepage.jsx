@@ -6,7 +6,7 @@ import { setUserSession, removeUserSession } from '../session-utils/UserSession'
 
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faTriangleExclamation, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import "./../assets/css/style.css";
 import "./../assets/css/login.css";
@@ -15,6 +15,7 @@ import "./../assets/css/login.css";
 function Homepage() {
 	let history = useHistory();
 	const [error, setError] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const [fullname, setFullname] = useState();
 	const [email, setEmail] = useState();
@@ -22,6 +23,7 @@ function Homepage() {
 
 	const handleLoginSubmit = async e => {
 		setError(null);
+		setIsLoading(true);
 		e.preventDefault();
 
 		const formData = new FormData();
@@ -38,6 +40,7 @@ function Homepage() {
 			
 			if (response.status !== 201) {
 				setError("Something went wrong, please try again.");
+				setIsLoading(false);
 				return;
 			}
 
@@ -49,6 +52,7 @@ function Homepage() {
 			console.log('Fetch Error :-S', err);
 			removeUserSession();
 			setError("Network error occurred. Please try again later.");
+			setIsLoading(false);
 		}
 	}
 
@@ -121,9 +125,21 @@ function Homepage() {
 							onChange={handleFileChange}
 							required />
 					<input  type="submit" 
-							value="Get Started"
-							className="auth-form-btn" />
+							value={isLoading ? "Analyzing Resume..." : "Get Started"}
+							className="auth-form-btn"
+							disabled={isLoading}
+							style={{ position: 'relative' }} />
 				</form>
+                {isLoading && (
+                    <div style={{ 
+                        position: 'absolute', 
+                        left: '50%', 
+                        transform: 'translateX(-50%)',
+                        marginTop: '10px'
+                    }}>
+                        <FontAwesomeIcon icon={faSpinner} spin size="lg" />
+                    </div>
+                )}
                 <div className="form-notice signin-notice">
                     <span>
                         Not your device? Use a private window.
