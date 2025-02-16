@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 from app.core.config import settings
 from app.api.v1.api import api_router
-from app.api.v1.endpoints import audio_analysis, resume_analysis
+from app.api.v1.endpoints import audio_analysis, resume_analysis, transcript_analysis
 
 # Load environment variables from .env file
 load_dotenv()
@@ -37,6 +37,11 @@ def create_application() -> FastAPI:
         resume_analysis.router, 
         prefix="/api/v1/resume", 
         tags=["resume"]
+    )
+    application.include_router(
+        transcript_analysis.router,
+        prefix="/api/v1/transcript",
+        tags=["transcript"]
     )
 
     @application.get("/")
