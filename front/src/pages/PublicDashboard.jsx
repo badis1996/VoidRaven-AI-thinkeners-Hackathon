@@ -1,5 +1,6 @@
 import React, { memo, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import './PublicDashboard.css';
 
 function PublicDashboard() {
   const { id } = useParams();
@@ -49,14 +50,11 @@ function PublicDashboard() {
   }, [id]);
 
   const renderList = (items) => (
-    <ul className="space-y-3">
+    <ul className="item-list">
       {items?.map((item, index) => (
-        <li 
-          key={index} 
-          className="flex items-start"
-        >
-          <span className="inline-block w-2 h-2 mt-2 mr-3 bg-gray-400 rounded-full"></span>
-          <span className="text-gray-700">{item}</span>
+        <li key={index} className="list-item">
+          <span className="bullet"></span>
+          <span>{item}</span>
         </li>
       ))}
     </ul>
@@ -64,19 +62,19 @@ function PublicDashboard() {
 
   if (loading) {
     return (
-      <div className="p-6 text-center">
-        <div className="animate-pulse">Loading interview data...</div>
+      <div className="loading-container">
+        <div className="loading-text">Loading interview data...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6 max-w-2xl mx-auto">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h2 className="text-red-700 font-semibold mb-2">Error Loading Interview</h2>
-          <p className="text-red-600">{error}</p>
-          <p className="text-sm text-red-500 mt-2">
+      <div className="error-container">
+        <div className="error-box">
+          <h2 className="error-title">Error Loading Interview</h2>
+          <p className="error-message">{error}</p>
+          <p className="error-help">
             Please try refreshing the page or contact support if the issue persists.
           </p>
         </div>
@@ -85,73 +83,73 @@ function PublicDashboard() {
   }
 
   if (!interviewData) {
-    return <div className="p-6 text-center">No interview data found</div>;
+    return <div className="no-data">No interview data found</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="p-6 max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">
-          Interview Analysis Dashboard
-        </h1>
+    <div className="dashboard">
+      <div className="dashboard-container">
+        <h1 className="dashboard-title">Interview Analysis Dashboard</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="content-wrapper">
           {/* Left Column - Transcript */}
-          <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800 flex items-center">
-              <span className="mr-2">📝</span>
+          <div className="transcript-section">
+            <h2 className="section-title">
+              <span className="icon">📝</span>
               Interview Transcript
             </h2>
-            <div className="whitespace-pre-wrap bg-gray-50 p-6 rounded-lg border border-gray-200 text-gray-700 leading-relaxed max-h-[600px] overflow-y-auto">
+            <div className="transcript-content">
               {interviewData.transcript}
             </div>
           </div>
 
           {/* Right Column - Evaluation */}
-          <div className="space-y-6">
+          <div className="evaluation-section">
             {/* Summary */}
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transition-all hover:shadow-xl">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-800 flex items-center">
-                <span className="mr-2">📊</span>
+            <div className="summary-box">
+              <h2 className="section-title">
+                <span className="icon">📊</span>
                 Summary
               </h2>
-              <p className="text-gray-700 leading-relaxed">{interviewData.evaluation.summary}</p>
+              <p>{interviewData.evaluation.summary}</p>
             </div>
 
-            {/* Strengths */}
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-green-100 transition-all hover:shadow-xl">
-              <h2 className="text-2xl font-semibold mb-4 text-green-600 flex items-center">
-                <span className="mr-2">💪</span>
-                Strengths
-              </h2>
-              {renderList(interviewData.evaluation.strengths)}
-            </div>
+            <div className="evaluation-grid">
+              {/* Strengths */}
+              <div className="evaluation-box strengths">
+                <h2 className="section-title">
+                  <span className="icon">💪</span>
+                  Strengths
+                </h2>
+                {renderList(interviewData.evaluation.strengths)}
+              </div>
 
-            {/* Weaknesses */}
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-red-100 transition-all hover:shadow-xl">
-              <h2 className="text-2xl font-semibold mb-4 text-red-600 flex items-center">
-                <span className="mr-2">🔍</span>
-                Areas for Improvement
-              </h2>
-              {renderList(interviewData.evaluation.weaknesses)}
-            </div>
+              {/* Weaknesses */}
+              <div className="evaluation-box weaknesses">
+                <h2 className="section-title">
+                  <span className="icon">🔍</span>
+                  Areas for Improvement
+                </h2>
+                {renderList(interviewData.evaluation.weaknesses)}
+              </div>
 
-            {/* Feedback */}
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-100 transition-all hover:shadow-xl">
-              <h2 className="text-2xl font-semibold mb-4 text-blue-600 flex items-center">
-                <span className="mr-2">💡</span>
-                Feedback
-              </h2>
-              {renderList(interviewData.evaluation.feedback)}
-            </div>
+              {/* Feedback */}
+              <div className="evaluation-box feedback">
+                <h2 className="section-title">
+                  <span className="icon">💡</span>
+                  Feedback
+                </h2>
+                {renderList(interviewData.evaluation.feedback)}
+              </div>
 
-            {/* Topics to Discuss */}
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-purple-100 transition-all hover:shadow-xl">
-              <h2 className="text-2xl font-semibold mb-4 text-purple-600 flex items-center">
-                <span className="mr-2">🎯</span>
-                Topics to Discuss
-              </h2>
-              {renderList(interviewData.evaluation.topicsToDiscuss)}
+              {/* Topics to Discuss */}
+              <div className="evaluation-box topics">
+                <h2 className="section-title">
+                  <span className="icon">🎯</span>
+                  Topics to Discuss
+                </h2>
+                {renderList(interviewData.evaluation.topicsToDiscuss)}
+              </div>
             </div>
           </div>
         </div>
