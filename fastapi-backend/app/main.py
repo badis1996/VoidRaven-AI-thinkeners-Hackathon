@@ -28,11 +28,11 @@ def create_application() -> FastAPI:
 
     # Add API routers
     application.include_router(api_router, prefix=settings.API_V1_STR)
-    # application.include_router(
-    #     audio_analysis.router,
-    #     prefix="/api/v1/audio",
-    #     tags=["audio"]
-    # )
+    application.include_router(
+        audio_analysis.router,
+        prefix="/api/v1/audio",
+        tags=["audio"]
+    )
     application.include_router(
         resume_analysis.router, 
         prefix="/api/v1/resume", 
