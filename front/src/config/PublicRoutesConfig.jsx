@@ -2,6 +2,7 @@ import {
 	Homepage,
     Login,
 	Interview,
+	PublicDashboard,
 } from '../pages';
 
 const PublicRoutesConfig = [
@@ -23,11 +24,19 @@ const PublicRoutesConfig = [
 	},
 	{
 		component: Login,
-		path: '/login',
+		path: 'login',
 		title: 'Login',
 		tabTitle: 'Login',
 		permission: [
 		]
+	},
+	{
+		component: PublicDashboard,
+		path: 'dashboard',
+		title: 'Public Dashboard',
+		tabTitle: 'Public Dashboard',
+		permission: [
+	]
 	},
 ];
 
