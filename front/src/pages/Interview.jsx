@@ -9,6 +9,8 @@ import './../assets/css/style.css';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
 const Interview = props => {
     const location = useLocation();
     const history = useHistory();
@@ -159,7 +161,8 @@ class InterviewMain extends Component {
                 })
             });
 
-            
+            this.setState({ isLoaded: false });
+            await sleep(5000);
             this.setState({ isLoaded: true });
 
             this.props.history.push(
