@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 from app.core.config import settings
 from app.api.v1.api import api_router
+from app.api.v1.endpoints import audio_analysis, resume_analysis
+
+# Load environment variables from .env file
+load_dotenv()
 
 def create_application() -> FastAPI:
     """Create and configure the FastAPI application."""
@@ -21,8 +26,18 @@ def create_application() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # Add API router
+    # Add API routers
     application.include_router(api_router, prefix=settings.API_V1_STR)
+    application.include_router(
+        audio_analysis.router,
+        prefix="/api/v1/audio",
+        tags=["audio"]
+    )
+    application.include_router(
+        resume_analysis.router, 
+        prefix="/api/v1/resume", 
+        tags=["resume"]
+    )
 
     @application.get("/")
     async def root():
@@ -39,4 +54,4 @@ app = create_application()
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
