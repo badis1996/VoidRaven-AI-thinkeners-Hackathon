@@ -1,6 +1,6 @@
 export const getApiUrl = () => {
 	if (process.env.REACT_APP_IN_PRODUCTION === "TRUE")
-		return "http://localhost:8000/";
+		return "https://safe-elise-logispear-d8964e07.koyeb.app/";
 	else
 		return "http://localhost:8000/";
 }
