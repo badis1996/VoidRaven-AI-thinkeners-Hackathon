@@ -1,0 +1,49 @@
+.circular-loading-root {
+    padding-top: 5vh;
+}
+
+.circular-loading-progressbar {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    animation: 1.4s linear 0s infinite normal none running container-rotation;
+    color: var(--primary-background-color-max);
+}
+
+.circular-loading-svg {
+    display: block;
+}
+
+.circular-loading-circle {
+    stroke: var(--primary-background-color-max);
+    stroke-dasharray: 80px, 200px;
+    stroke-dashoffset: 0;
+    animation-timeline: auto;
+    animation-range-start: normal;
+    animation-range-end: normal;
+    animation: 1.4s ease-in-out 0s infinite normal none running loading-animation;
+}
+
+@keyframes container-rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loading-animation {
+    0% {
+        stroke-dasharray: 1px, 200px;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 100px, 200px;
+        stroke-dashoffset: -15px;
+    } 
+    100% {
+        stroke-dasharray: 100px, 200px;
+        stroke-dashoffset: -125px;
+    }
+}

@@ -1,0 +1,185 @@
+html, 
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    font-family: 'Cabin';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--background-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    caret-color: var(--primary-background-color-max);
+    caret-shape: block;
+}
+
+/* TYPEFACES */
+@font-face {
+    font-family: "Robot";
+    src: local("Robot"),
+     url("./../typefaces/robot/Robot.otf") format("truetype");
+}
+
+@font-face {
+    font-family: "Nurom";
+    src: local("Nurom"),
+     url("./../typefaces/nurom/Nurom-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Gantari";
+    src: local("Gantari"),
+     url("./../typefaces/gantari/TTF/AutoHint/Gantari-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Cabin";
+    src: local("Cabin"),
+     url("./../typefaces/cabin/Cabin-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Cabin-Bold";
+    src: local("Cabin-Bold"),
+     url("./../typefaces/cabin/Cabin-Bold.ttf") format("truetype");
+}
+
+/* Code Selection color setup */
+::-moz-selection { /* Code for Firefox */
+    color: var(--text-color);
+    background: rgb(0, 189, 189);
+}
+
+::selection {
+    color: var(--text-color);
+    background: rgb(0, 189, 189);
+}
+
+::-webkit-selection {
+    color: var(--text-color);
+    background: rgb(0, 189, 189);
+}
+
+input[type="date"]::-webkit-datetime-edit-day-field:focus,
+input[type="date"]::-webkit-datetime-edit-month-field:focus,
+input[type="date"]::-webkit-datetime-edit-year-field:focus,
+input[type="date"]::-moz-datetime-edit-day-field:focus,
+input[type="date"]::-moz-datetime-edit-month-field:focus,
+input[type="date"]::-moz-datetime-edit-year-field:focus,
+input[type="date"]::datetime-edit-day-field:focus,
+input[type="date"]::datetime-edit-month-field:focus,
+input[type="date"]::datetime-edit-year-field:focus {
+    color: var(--text-color);
+    background: rgb(0, 189, 189);
+}
+
+/* CONSTANTS */
+:root {
+    --border-radius-default: 40px;
+
+    --navigation-bar-size-web: 80px;
+    --navigation-bar-size-mobile: 65px;
+
+    --projects-explorer-size-web: 14vw;
+    --projects-explorer-size-mobile: 150px;
+
+    --projects-sub-explorer-size-web: 18vw;
+    --projects-sub-explorer-size-mobile: 150px;
+
+    --background-color: #000717;
+    --text-color: #FCFCFC;
+
+    --primary-background-color-max: rgb(24, 255, 251, 1);
+    --primary-background-color: rgb(24, 255, 251, 0.9);
+    --primary-background-color-hover: rgb(24, 255, 251, 0.75);
+    --primary-background-color-active: rgba(24, 255, 251, 0.6);
+    --primary-outline-color: rgba(8, 138, 136, 0.2);
+    --primary-text-color: #0F0F0F;
+
+    --secondary-background-color: rgb(0, 209, 207, 0.3);
+    --secondary-text-color: rgba(194, 255, 254, 1);
+    --secondary-border-color: rgb(138, 145, 158, 0.66);
+
+    --border-color: rgb(138, 145, 158, 0.3);
+    --hr-color: rgba(50, 53, 61, 1);
+    --custom-hr-color: rgba(50, 53, 61, 0.5);
+
+    --error-banner-background-color: rgb(255, 71, 87, 0.2);
+    --error-banner-text-color: rgb(255, 71, 87);
+
+    --primary-item-background-color: rgba(21, 27, 40, 1);
+    --primary-item-background-color-hover: rgba(21, 27, 40, 1);
+    --secondary-item-background-color: rgba(21, 27, 40, 0.5);
+
+    /* Public header constants */
+    --header-background-color: #000920;
+
+    --header-primary-background-color: #4a4e57;
+    --header-primary-background-color-hover: #595d66;
+
+    --header-secondary-background-color: #32353d;
+    --header-secondary-background-color-hover: #3d4049;
+
+    --auth-alt-btn-background-color: rgba(30, 32, 37, 1);
+    --auth-alt-btn-text-color: rgba(252, 252, 252, 0.25);
+
+    --navigator-text-color: rgb(233, 233, 233);
+
+    --modal-backdrop-background-color: rgba(37, 47, 68, 0.75);
+
+    --task-checkmark-border-color: rgba(82, 93, 128, 1);
+    --task-checkmark-background-color: rgba(50, 53, 61, 1);
+    --task-checkmark-color: rgba(24, 255, 251, 1);
+    --task-checkmark-checked-border-color: rgb(0, 209, 207, 0.4);
+    --task-checkmark-checked-background-color: rgb(0, 209, 207, 0.2);
+    --task-checkmark-checked-label-text-color: #696969;
+    --task-checkmark-checked-label-line-through-color: rgb(178, 255, 254);
+
+    --chart-controls-item-background-color: rgba(34, 43, 61, 1);
+    --chart-controls-item-background-color-hover: rgba(34, 43, 61, 0.7);
+    --chart-controls-item-background-color-active: rgba(34, 43, 61, 0.3);
+    --chart-controls-item-background-color-selected: rgba(30, 32, 37, 1);
+
+    --red-habit-title-text-color: rgb(255, 131, 143);
+    --green-habit-title-text-color: rgb(121, 255, 134);
+}
+
+hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;               
+    background-color: var(--hr-color);
+    height: 1px;
+}
+
+.modal-hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;               
+    background-color: var(--custom-hr-color);
+    height: 1px;
+}
+
+input[type="text"], 
+input[type="email"],
+input[type="password"] {
+    font-family: 'Gantari';
+    letter-spacing: -0.05rem;
+    font-size: 18px !important;
+}
+
+input::placeholder {
+    font-family: 'Gantari';
+    letter-spacing: -0.05rem;
+    font-size: 16px !important;
+}
+
+.content-container {
+    padding: 69px 15vw 5px;
+}
