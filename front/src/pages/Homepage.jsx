@@ -3,10 +3,11 @@ import { useHistory } from "react-router-dom";
 // import { JumbotronWrapper } from '../components/common';
 import { getApiUrl } from '../utils/config';
 import { setUserSession, removeUserSession } from '../session-utils/UserSession';
+import CircularLoading from './../components/circular-loading/CircularLoading';
 
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 import "./../assets/css/style.css";
 import "./../assets/css/login.css";
@@ -46,7 +47,19 @@ function Homepage() {
 
 			const data = await response.json();
 			//setUserSession(data.token, data.user.pseudo);
-			history.push('/interview');
+
+			setIsLoading(false);
+
+			history.push(
+				{
+					pathname: '/interview', 
+					state: {
+						name: data.name,
+						email: data.email,
+						cv_data: JSON.stringify(data.cv_data),
+					}
+				}
+			);
 			
 		} catch (err) {
 			console.log('Fetch Error :-S', err);
@@ -82,73 +95,69 @@ function Homepage() {
 	    //     </form>
 		// </JumbotronWrapper>
 
-		<div className="center-to-screen">
-			<div className="getting-started-form">
-				<div className="auth-form-header">
-					<h1 className="form-title signin-title">
-                        Launch Your Interview Experience
-					</h1>
-                    <p className="signup-prompt">
-                        Ready to begin? Just fill out the following information and dive into your interview – it's quick and easy!
-                    </p>
-					{error
-						? <p className="auth-form-error"><FontAwesomeIcon icon={faTriangleExclamation} />&nbsp;&nbsp;{error}</p>
-						: <p className="auth-form-error-empty"></p>
-					}
+		<>
+		{
+			isLoading
+			? <CircularLoading />
+			: <div className="center-to-screen">
+				<div className="getting-started-form">
+					<div className="auth-form-header">
+						<h1 className="form-title signin-title">
+							Launch Your Interview Experience
+						</h1>
+						<p className="signup-prompt">
+							Ready to begin? Just fill out the following information and dive into your interview – it's quick and easy!
+						</p>
+						{error
+							? <p className="auth-form-error"><FontAwesomeIcon icon={faTriangleExclamation} />&nbsp;&nbsp;{error}</p>
+							: <p className="auth-form-error-empty"></p>
+						}
+					</div>
+					<form onSubmit={handleLoginSubmit}>
+						<p className="auth-form-label">
+							<b>Full Name</b>
+						</p>
+						<input  type="text" 
+								name="text"
+								placeholder="John Doe"
+								className="auth-form-input"
+								onChange={e => setFullname(e.target.value)} 
+								required 
+								autoFocus />
+						<p className="auth-form-label">
+							<b>Email address</b>
+						</p>
+						<input  type="email" 
+								name="email"
+								placeholder="john.doe@mail.com"
+								className="auth-form-input"
+								onChange={e => setEmail(e.target.value)} 
+								required />
+						<p className="auth-form-label">
+							<b>Curriculum vitæ (CV)</b>
+						</p>
+						<input  type="file" 
+								name="cv"
+								className="auth-form-input"
+								onChange={handleFileChange}
+								required />
+						<input  type="submit" 
+								value={isLoading ? "Analyzing Resume..." : "Get Started"}
+								className="auth-form-btn"
+								disabled={isLoading}
+								style={{ position: 'relative' }} />
+					</form>
+					<div className="form-notice signin-notice">
+						<span>
+							Not your device? Use a private window.
+							<br />
+							See our <Link className="notice" to='/privacy'>Privacy Policy</Link> for more info.
+						</span>
+					</div>
 				</div>
-				<form onSubmit={handleLoginSubmit}>
-					<p className="auth-form-label">
-						<b>Full Name</b>
-					</p>
-					<input  type="text" 
-							name="text"
-							placeholder="John Doe"
-							className="auth-form-input"
-                            onChange={e => setFullname(e.target.value)} 
-							required 
-							autoFocus />
-					<p className="auth-form-label">
-						<b>Email address</b>
-					</p>
-					<input  type="email" 
-							name="email"
-							placeholder="john.doe@mail.com"
-							className="auth-form-input"
-                            onChange={e => setEmail(e.target.value)} 
-							required />
-                    <p className="auth-form-label">
-						<b>Curriculum vitæ (CV)</b>
-					</p>
-					<input  type="file" 
-							name="cv"
-							className="auth-form-input"
-							onChange={handleFileChange}
-							required />
-					<input  type="submit" 
-							value={isLoading ? "Analyzing Resume..." : "Get Started"}
-							className="auth-form-btn"
-							disabled={isLoading}
-							style={{ position: 'relative' }} />
-				</form>
-                {isLoading && (
-                    <div style={{ 
-                        position: 'absolute', 
-                        left: '50%', 
-                        transform: 'translateX(-50%)',
-                        marginTop: '10px'
-                    }}>
-                        <FontAwesomeIcon icon={faSpinner} spin size="lg" />
-                    </div>
-                )}
-                <div className="form-notice signin-notice">
-                    <span>
-                        Not your device? Use a private window.
-                        <br />
-                        See our <Link className="notice" to='/privacy'>Privacy Policy</Link> for more info.
-                    </span>
-                </div>
 			</div>
-		</div>
+		}
+		</>
 	);
 }
 
