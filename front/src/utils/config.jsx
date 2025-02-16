@@ -1,8 +1,8 @@
 export const getApiUrl = () => {
 	if (process.env.REACT_APP_IN_PRODUCTION === "TRUE")
-		return "localhost:8000/";
+		return "http://localhost:8000/";
 	else
-		return "localhost:8000/";
+		return "http://localhost:8000/";
 }
 
 export const getRessouresUrl = () => {
