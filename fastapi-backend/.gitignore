@@ -43,7 +43,8 @@ nosetests.xml
 coverage.xml
 
 # Environment variables
-.env
+.env.local
+.env.*.local
 
 # Database
 *.db
