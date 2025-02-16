@@ -1,0 +1,67 @@
+{
+    "name": "ALEXANDRA MARTIN",
+    "email": "alex.martin@email.com",
+    "phone": "+33 7 56 89 34 21",
+    "location": "45 Rue de Rivoli, Paris, France 75001",
+    "summary": "Ambitious and detail-oriented business graduate with a strong interest in finance and international business. Proven track record in managing financial analysis projects and collaborating with cross-functional teams. Seeking to further develop skills and contribute to the dynamic environment at Paris Business School.",
+    "education": [
+        {
+            "institution": "University of London",
+            "degree": "BSc",
+            "field_of_study": "Finance and Business Management",
+            "graduation_date": "2023-07"
+        }
+    ],
+    "work_experience": [
+        {
+            "company": "BNP Paribas",
+            "title": "Financial Analyst Intern",
+            "start_date": "2022-06",
+            "end_date": "2022-12",
+            "location": "Paris, France",
+            "description": [
+                "Conducted financial analysis and prepared reports for investment strategies, contributing to a 15% increase in client portfolio performance",
+                "Collaborated with senior analysts to evaluate market trends and economic indicators",
+                "Prepared presentations for client meetings and internal stakeholders"
+            ]
+        },
+        {
+            "company": "HSBC",
+            "title": "Operations Intern",
+            "start_date": "2021-06",
+            "end_date": "2021-08",
+            "location": "London, United Kingdom",
+            "description": [
+                "Assisted in streamlining operations processes, reducing processing time by 10%",
+                "Supported the client services team in handling inquiries and resolving issues",
+                "Maintained and updated operational reports for management review"
+            ]
+        }
+    ],
+    "skills": [
+        {
+            "name": "Financial analysis"
+        },
+        {
+            "name": "Microsoft Excel and financial modeling"
+        },
+        {
+            "name": "Market research"
+        },
+        {
+            "name": "Project management"
+        },
+        {
+            "name": "Communication and teamwork"
+        }
+    ],
+    "certifications": [
+        "Certified Financial Analyst (CFA) Level 1",
+        "Project Management Professional (PMP) Certificate"
+    ],
+    "languages": [
+        "English",
+        "French",
+        "Spanish"
+    ]
+}
